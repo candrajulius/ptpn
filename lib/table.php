@@ -38,9 +38,11 @@
             ";
         }
         ?>
+        
 
-
-          <table class="table table-hover table-responsive table-bordered">
+          <table id="myTable" class="table table-hover table-responsive" >
+            <a href="export/xls.php" class="btn btn-info"><i class="fa fa-download"></i> Excel</a>
+            <a href="export/pdf.php" class="btn btn-danger"><i class="fa fa-download"></i> PDF</a>
             <thead class="bg-secondary text-light text-truncate">
               <tr>
                 <th scope="col">No</th>
@@ -55,6 +57,7 @@
                 <th scope="col">Punishment</th>
                 <th scope="col">Jumlah</th>
                 <th scope="col">Gambar</th>
+                <th scope="col">Document</th>
                 <th scope="col">tgl_ditambah</th>
                 <th scope="col">Tgl_diupdate</th>
                 <th scope="col">Aksi</th>
@@ -86,6 +89,7 @@
                 ";
               }
               while ($data = mysqli_fetch_assoc($new_query)) {
+                $data_nrp = $data['nrp'];
               ?>
               <tr>
                 <th scope="row"><?=$no;?></th>
@@ -100,6 +104,16 @@
                 <td><?=number_format($data['punishment']);?></td>
                 <td><?=number_format($data['jumlah']);?></td>
                 <td><img src="<?=$data['gambar'];?>" width="50"></td>
+                <td>
+                  <?php
+                  $doc_query = mysqli_query($connection,"SELECT * FROM dokumen where nrp_parent = '$data_nrp' order by id desc limit 1");
+                  while($data_doc = mysqli_fetch_assoc($doc_query)){
+                    echo "
+                    <a href='$data_doc[path]' class='text-truncate'><i class='fa fa-download'></i> File ($data_doc[tipe_file])</a>
+                    ";
+                  }
+                  ?>
+                </td>
                 <td><?=$data['tgl_ditambah'];?></td>
                 <td><?=$data['tgl_diupdate'];?></td>
                 <td class="text-truncate">

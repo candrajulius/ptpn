@@ -1,0 +1,39 @@
+
+<table border="1">
+    <thead>
+        <tr>
+        <th scope="col">No</th>
+        <th scope="col">NRP</th>
+        <th scope="col">Nama Karyawan</th>
+        <th scope="col">SMKBK</th>
+        <th scope="col">Maping Competency</th>
+        <th scope="col">CLI</th>
+        <th scope="col">Pendidikan</th>
+        <th scope="col">Sertifikat</th>
+        <th scope="col">Perjalanan Karir</th>
+        <th scope="col">Punishment</th>
+        <th scope="col">Jumlah</th>
+        <th scope="col">Gambar</th>
+        <th scope="col">tgl_ditambah</th>
+        <th scope="col">Tgl_diupdate</th>
+        </tr>
+    </thead>
+    <tbody>
+                    <tr>
+            <th scope="row">1</th>
+            <td>123456789012345</td>
+            <td>34</td>
+            <td>34</td>
+            <td>34</td>
+            <td>34</td>
+            <td>34</td>
+            <td>34</td>
+            <td>34</td>
+            <td>34</td>
+            <td>238</td>
+            <td><img src="http://localhost/ptpn/images/thumbnail/bottomnavigation.webp" width="50"></td>
+            <td>2022-04-10 13:04:39</td>
+            <td>2022-04-18 14:59:33</td>
+            </tr>
+            </tbody>
+</table>

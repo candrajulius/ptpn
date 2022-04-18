@@ -14,7 +14,7 @@ if(isset($_POST['edit'])){
     $jumlah = $smkbk+$mapping_competency+$cli+$pendidikan+$sertifikat+$perjalanan_karir+$punishment;
 
     //UPLOAD IMAGE
-    $ekstensi_diperbolehkan	= array('png','jpg');
+    $ekstensi_diperbolehkan	= array('png','jpg','webp','svg','jpeg');
     $nama_gambar = $_FILES['file']['name'];
     $x = explode('.', $nama_gambar);
     $ekstensi = strtolower(end($x));
@@ -22,7 +22,7 @@ if(isset($_POST['edit'])){
     $path = "images/thumbnail/".$nama_gambar;
     $file_tmp = $_FILES['file']['tmp_name'];
     if(in_array($ekstensi, $ekstensi_diperbolehkan) === true) {
-        if($ukuran < 10044070){
+        if($ukuran < 10044070000){
             move_uploaded_file($file_tmp, $path);
         }       
     }
@@ -31,8 +31,39 @@ if(isset($_POST['edit'])){
     } else {
         $gambar = $path;
     }
-    
+
+
+    //UPLOAD Document
+    $ekstensi_file_diperbolehkan	= array('doc','pdf','xls','docx');
+    $nama_file = $_FILES['dokumen']['name'];
+    $tipe_file = explode('.', $nama_file);
+    $ekstensi_file = strtolower(end($tipe_file));
+    $newFileName =preg_replace("[a-zA-Z0-9_-]", "", $nama_file);
+    $ukuran_dokumen	= $_FILES['dokumen']['size'];
+    $file_doc_tmp = $_FILES['dokumen']['tmp_name'];
+    $path_file = 'dokumen/'.$newFileName;
+    if(in_array($ekstensi_file, $ekstensi_file_diperbolehkan) === true) {
+        if($ukuran_dokumen < 1044070000){
+            move_uploaded_file($file_doc_tmp, $path_file);
+        }
+    }
+    if($nama_file == NULL) {
+        $postNamefile = $_POST['nama_file'];
+        $postTipefile = $_POST['tipe_file'];
+        $postPathfile = $_POST['path'];
+    } else {
+        $postNamefile = $newFileName;
+        $postTipefile = $ekstensi_file;
+        $postPathfile = $path_file;
+    }
+    $document_query = mysqli_query($connection,"SELECT * FROM dokumen where nrp_parent = '{$data['nrp']}' AND nama_file = '$postNamefile' AND tipe_file = '$postTipefile'");
+    $data_document = mysqli_fetch_array($document_query);
+
     $insertData = mysqli_query($connection,"UPDATE `karyawan` SET `nrp` = '$nrp', `nama_karyawan` = '$username', `smbk` = '$smkbk', `mapping_competency` = '$mapping_competency', `cli` = '$cli', `pendidikan` = '$pendidikan', `sertifikat` = '$sertifikat', `perjalanan_karir` = '$perjalanan_karir', `punishment` = '$punishment',`jumlah` = '$jumlah', `gambar` = '$gambar', `tgl_diupdate` = current_timestamp() WHERE `karyawan`.`id` = $target_data");
+    if(mysqli_num_rows($document_query) > 0){
+    } else {
+        $insert_document = mysqli_query($connection,"INSERT INTO `dokumen` (`nrp_parent`, `nama_file`, `tipe_file`, `path`, `publish`) VALUES ('$nrp', '$postNamefile', '$postTipefile', '$postPathfile', '$date');");
+    }
     if($insertData == true){
         $msg_type = "success";
         $msg_content = "Data Berhasil di Edit";
@@ -41,7 +72,8 @@ if(isset($_POST['edit'])){
         $msg_content = "Systemn Error";
     }
 }
-
+$document_query = mysqli_query($connection,"SELECT * FROM dokumen where nrp_parent = '{$data['nrp']}' ORDER BY id DESC LIMIT 1");
+$data_document = mysqli_fetch_array($document_query);
 ?>
 
 
@@ -156,7 +188,32 @@ if(isset($_POST['edit'])){
                                 </label>
                                 <div class="col-md-6 col-sm-6 ">
                                 <input type="hidden" name="gambar" value="<?=$data['gambar'];?>">
-                                <input autocomplete='off'  type="file" class="form-control" id="exampleFormControlFile1" name="file">
+                                <input autocomplete='off'  type="file" id="exampleFormControlFile1" name="file">
+                                <small class="text-danger">Ektensi Didperbolehkan : PNG,JPG,SVG,WEBP</small>
+                                </div>
+                            </div>
+                            <div class="item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="customFile">Dokumen Terbaru
+                                </label>
+                                <div class="col-md-6 col-sm-6 ">
+                                <?php
+                                if(mysqli_num_rows($document_query) == 0) {
+                                    echo "<button class='btn btn-danger' type='button'>Tidak Ada Dokumen</button>";
+                                } else {
+                                    echo "<a class='btn btn-secondary text-light' href='$BASE$data_document[path]'>$data_document[nama_file]</a>";
+                                }
+                                ?>
+                                </div>
+                            </div>
+                            <div class="custom-file item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="customFile">Pilih Dokumen<span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 ">
+                                <input type="hidden" name="nama_file" value="<?=$data_document['nama_file'];?>">
+                                <input type="hidden" name="tipe_file" value="<?=$data_document['tipe_file'];?>">
+                                <input type="hidden" name="path_file" value="<?=$data_document['path'];?>">
+                                <input autocomplete='off'  type="file" class="" name="dokumen">
+                                <small class="text-danger">Ektensi Didperbolehkan : DOC,PDF,XLS,DOTX</small>
                                 </div>
                             </div>
                             <div class="ln_solid"></div>

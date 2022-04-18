@@ -27,12 +27,28 @@ if(isset($_POST['submit'])){
         }
     }
 
-    $ceckDb = mysqli_query($connection,"SELECT * FROM karyawan WHERE nrp= $nrp");
+    //UPLOAD Document
+    $ekstensi_file_diperbolehkan	= array('doc','pdf','xls','docx');
+    $nama_file = $_FILES['dokumen']['name'];
+    $tipe_file = explode('.', $nama_file);
+    $ekstensi_file = strtolower(end($tipe_file));
+    $newFileName =preg_replace("[a-zA-Z0-9_-]", "", $nama_file);
+    $ukuran_dokumen	= $_FILES['dokumen']['size'];
+    $file_doc_tmp = $_FILES['dokumen']['tmp_name'];
+    $path_file = 'dokumen/'.$newFileName;
+    if(in_array($ekstensi_file, $ekstensi_file_diperbolehkan) === true) {
+        if($ukuran_dokumen < 1044070000){
+            move_uploaded_file($file_doc_tmp, $path_file);
+        }
+    }
+
+    $ceckDb = mysqli_query($connection,"SELECT * FROM karyawan WHERE nrp = $nrp");
     if(mysqli_num_rows($ceckDb) > 0){   
         $msg_type = "error";
         $msg_content = "Data sudah ada di database";
     }else{
         $insertData = mysqli_query($connection,"INSERT INTO `karyawan` (`nrp`, `nama_karyawan`, `smbk`, `mapping_competency`, `cli`, `pendidikan`, `sertifikat`,`perjalanan_karir`,`punishment`,`jumlah`,`gambar`,`tgl_ditambah`) VALUES ('$nrp', '$username', '$smkbk', '$mapping_competency', '$cli', '$pendidikan', '$sertifikat', '$perjalanan_karir','$punishment','$jumlah','$path','$date $time')");
+        $insert_document = mysqli_query($connection,"INSERT INTO `dokumen` (`nrp_parent`, `nama_file`, `tipe_file`, `path`, `publish`) VALUES ('$nrp', '$newFileName', '$ekstensi_file', '$path_file', '$date');");
         if($insertData == true){
             $msg_type = "success";
             $msg_content = "Data berhasil ditambahkan";
@@ -146,10 +162,18 @@ if(isset($_POST['submit'])){
                                 </div>
                             </div>
                             <div class="custom-file item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3 label-align" for="customFile">Pilih Dokumen<span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 ">
+                                <input autocomplete='off'  type="file" class="" name="dokumen" required>
+                                <small class="text-danger">Ektensi Didperbolehkan : DOC,PDF,XLS,DOTX</small>
+                                </div>
+                            </div>
+                            <div class="custom-file item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="customFile">Pilih Gambar<span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 ">
-                                <input autocomplete='off'  type="file" class="form-control" id="exampleFormControlFile1" name="file" required>
+                                <input autocomplete='off'  type="file" class="" id="exampleFormControlFile1" name="file" required>
                                 <small class="text-danger">Ektensi Didperbolehkan : PNG,JPG,SVG,WEBP</small>
                                 </div>
                             </div>
