@@ -41,6 +41,11 @@ require("lib/config.php");
           <section class="login_content">
             <form method="post">
             <h1 class="text-dark"><?=$webname;?></h1>
+              <?php
+              if($msg_type == "error") {
+                echo "<div class='alert alert-danger mb-3 text-dark'>$msg_content</div>";
+              } 
+              ?>
               <div>
                 <input type="text" class="form-control" name="username" placeholder="username" required="" />
               </div>

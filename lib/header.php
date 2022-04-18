@@ -28,7 +28,7 @@
 
     <!-- Custom Theme Style -->
     <link href="build/css/custom.min.css" rel="stylesheet">
-
+    
     <link href='<?=$favicon;?>' rel='icon' type='image/x-icon'/>
     <link href='<?=$favicon;?>' rel='icon' sizes='32x32'/>
     <link href='<?=$favicon;?>' rel='icon' sizes='100x100'/>
