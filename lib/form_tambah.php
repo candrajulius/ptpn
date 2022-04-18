@@ -95,7 +95,7 @@ if(isset($_POST['submit'])){
                                 <label class="col-form-label col-md-3 col-sm-3 label-align" for="nrp">NRP <span class="required">*</span>
                                 </label>
                                 <div class="col-md-6 col-sm-6 ">
-                                    <input autocomplete='off'  type="number" id="nrp" name="nrp" required="required" class="form-control ">
+                                    <input autocomplete='off'  type="number" id="nrp" name="nrp" required="required" class="form-control" min="0" max="15">
                                 </div>
                             </div>
                             <div class="item form-group">

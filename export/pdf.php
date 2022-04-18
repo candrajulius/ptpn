@@ -6,15 +6,15 @@ include("../lib/config.php");
 $pdf=new FPDF();
 
 //Disable automatic page break
-$pdf->SetAutoPageBreak(true);
+$pdf->SetAutoPageBreak(false);
 
 //Add first page
 $pdf->AddPage();
 
 //set initial y axis position per page
 $y_axis_initial = 10;
-$y_axis = "10";
-$row_height ="10";
+$y_axis = "28";
+$row_height ="0";
 
 
 $pdf->SetFillColor(255,255,255,0);
@@ -26,7 +26,7 @@ $pdf->Cell(30,8,'DATA KARYAWAN',0,0,'L',1);
 //print column titles
 $pdf->SetFillColor(80,37,222);
 $pdf->SetFont('Arial','B',8);
-$pdf->SetY(20);
+$pdf->SetY($y_axis_initial+10);
 $pdf->SetX(8);
 $pdf->Cell(30,8,'NRP',1,0,'L',1);
 $pdf->Cell(40,8,'Nama',1,0,'L',1);
@@ -51,7 +51,7 @@ $i = 0;
 $max = 25;
 
 //Set Row Height
-$row_height = 5;
+$row_height = 6;
 
 while($row = mysqli_fetch_array($result))
 {
@@ -93,7 +93,7 @@ while($row = mysqli_fetch_array($result))
     $jumlah = $row['jumlah'];
 
     $pdf->SetFont('Arial','',8);
-    $pdf->SetY(28);
+    $pdf->SetY($y_axis);
     $pdf->SetX(8);
     $pdf->Cell(30,6,$nrp,1,0,'L',0);
     $pdf->Cell(40,6,$nama,1,0,'L',0);
